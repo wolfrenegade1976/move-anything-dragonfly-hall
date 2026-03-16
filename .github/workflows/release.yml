@@ -28,19 +28,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build with Docker
+      - name: Build DSP with Docker
         run: |
-          docker build --output type=local,dest=dist/dragonfly-hall .
+          docker build --output type=local,dest=/tmp/dsp-out .
 
-      - name: Copy module files
+      - name: Package module
         run: |
+          mkdir -p dist/dragonfly-hall
+          # Copy compiled DSP with correct name
+          cp /tmp/dsp-out/dsp.so dist/dragonfly-hall/dragonfly-hall.so
+          # Copy module files
           cp src/module.json dist/dragonfly-hall/
-          [ -f src/ui.js ] && cp src/ui.js dist/dragonfly-hall/ || true
-
-      - name: Create tarball
-        run: |
+          # Create tarball
           cd dist
           tar -czvf dragonfly-hall-module.tar.gz dragonfly-hall/
+          echo "Contents:"
+          tar -tzvf dragonfly-hall-module.tar.gz
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -57,11 +60,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           cat > release.json << REOF
-          {
-            "version": "${VERSION}",
-            "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/dragonfly-hall-module.tar.gz"
-          }
-          REOF
+{
+  "version": "${VERSION}",
+  "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/dragonfly-hall-module.tar.gz"
+}
+REOF
           git add release.json
           git commit -m "chore: update release.json for ${{ github.ref_name }}" || echo "No changes"
           git push origin main
