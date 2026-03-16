@@ -30,14 +30,16 @@ jobs:
 
       - name: Build DSP with Docker
         run: |
-          docker build --output type=local,dest=/tmp/dsp-out .
-          echo "Docker output contents:"
-          find /tmp/dsp-out -type f
+          docker build -t dragonfly-hall-builder --target builder .
+          docker create --name dsp-extract dragonfly-hall-builder
+          docker cp dsp-extract:/build/dsp.so ./dsp.so
+          docker rm dsp-extract
+          ls -lh dsp.so
 
       - name: Package module
         run: |
           mkdir -p dist/dragonfly-hall
-          cp /tmp/dsp-out/dsp.so dist/dragonfly-hall/dragonfly-hall.so
+          cp dsp.so dist/dragonfly-hall/dragonfly-hall.so
           cp src/module.json dist/dragonfly-hall/
           tar -czvf dragonfly-hall-module.tar.gz -C dist dragonfly-hall/
           echo "Tarball contents:"
