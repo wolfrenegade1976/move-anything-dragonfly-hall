@@ -1,0 +1,15 @@
+{
+  "id": "dragonfly-hall",
+  "name": "Dragonfly Hall",
+  "abbrev": "DFH",
+  "version": "1.0.0",
+  "description": "Dragonfly Hall Reverb",
+  "author": "bradcoomber",
+  "license": "GPL-3.0",
+  "dsp": "dragonfly-hall.so",
+  "api_version": 2,
+  "capabilities": {
+    "chainable": true,
+    "component_type": "audio_fx"
+  }
+}
