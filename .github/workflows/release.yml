@@ -36,13 +36,14 @@ jobs:
           mkdir -p dist/dragonfly-hall
           cp /tmp/dsp-out/dsp.so dist/dragonfly-hall/dragonfly-hall.so
           cp src/module.json dist/dragonfly-hall/
-          cd dist && tar -czvf dragonfly-hall-module.tar.gz dragonfly-hall/
-          echo "Tarball contents:" && tar -tzvf dist/dragonfly-hall-module.tar.gz
+          tar -czvf dragonfly-hall-module.tar.gz -C dist dragonfly-hall/
+          echo "Tarball contents:"
+          tar -tzvf dragonfly-hall-module.tar.gz
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/dragonfly-hall-module.tar.gz
+          files: dragonfly-hall-module.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
