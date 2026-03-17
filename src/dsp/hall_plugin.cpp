@@ -78,6 +78,21 @@ static void hall_set_param(void *inst, const char *key, const char *val) {
         if(idx>=0&&idx<NUM_PRESETS) load_preset(h,idx);
         return;
     }
+    // Restore full state from JSON snapshot
+    if(strcmp(key,"set_state")==0) {
+        const char *p = strstr(val,"\"preset\":");
+        if(p) { int idx=atoi(p+9); if(idx>=0&&idx<NUM_PRESETS) h->cur=idx; }
+        for(int i=0;i<paramCount;i++) {
+            char search[64];
+            snprintf(search,sizeof(search),"\"%s\":",PARAMS[i].symbol);
+            const char *found=strstr(val,search);
+            if(found) {
+                float v=(float)atof(found+strlen(search));
+                h->p[i]=v; h->dsp->setParameterValue(i,v);
+            }
+        }
+        return;
+    }
     int idx=key_to_param(key); if(idx<0) return;
     h->p[idx]=(float)atof(val); h->dsp->setParameterValue(idx,h->p[idx]);
 }
@@ -91,6 +106,15 @@ static int hall_get_param(void *inst, const char *key, char *buf, int buf_len) {
         return snprintf(buf,buf_len,"%d",NUM_PRESETS);
     if(strcmp(key,"preset_name")==0)
         return snprintf(buf,buf_len,"%s",PRESETS[h->cur].name);
+
+    // State snapshot for patch persistence
+    if(strcmp(key,"get_state")==0) {
+        int n=snprintf(buf,buf_len,"{\"preset\":%d",h->cur);
+        for(int i=0;i<paramCount&&n<buf_len-32;i++)
+            n+=snprintf(buf+n,buf_len-n,",\"%s\":%.4f",PARAMS[i].symbol,h->p[i]);
+        if(n<buf_len-2) { buf[n]='}'; buf[n+1]='\0'; n++; }
+        return n;
+    }
 
     if(strcmp(key,"ui_hierarchy")==0) {
         static const char j[]=
