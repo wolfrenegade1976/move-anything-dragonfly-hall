@@ -79,7 +79,7 @@ static void hall_set_param(void *inst, const char *key, const char *val) {
         return;
     }
     // Restore full state from JSON snapshot
-    if(strcmp(key,"set_state")==0) {
+    if(strcmp(key,"state")==0) {
         const char *p = strstr(val,"\"preset\":");
         if(p) { int idx=atoi(p+9); if(idx>=0&&idx<NUM_PRESETS) h->cur=idx; }
         for(int i=0;i<paramCount;i++) {
@@ -108,7 +108,7 @@ static int hall_get_param(void *inst, const char *key, char *buf, int buf_len) {
         return snprintf(buf,buf_len,"%s",PRESETS[h->cur].name);
 
     // State snapshot for patch persistence
-    if(strcmp(key,"get_state")==0) {
+    if(strcmp(key,"state")==0) {
         int n=snprintf(buf,buf_len,"{\"preset\":%d",h->cur);
         for(int i=0;i<paramCount&&n<buf_len-32;i++)
             n+=snprintf(buf+n,buf_len-n,",\"%s\":%.4f",PARAMS[i].symbol,h->p[i]);
