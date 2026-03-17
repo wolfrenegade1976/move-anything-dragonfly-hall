@@ -35,22 +35,26 @@ jobs:
           docker cp dsp-extract:/build/dsp.so ./dsp.so
           docker rm dsp-extract
           ls -lh dsp.so
+          file dsp.so
 
       - name: Package module
         run: |
           mkdir -p dist/dragonfly-hall
           cp dsp.so dist/dragonfly-hall/dragonfly-hall.so
           cp src/module.json dist/dragonfly-hall/
+          ls -lh dist/dragonfly-hall/
           tar -czvf dragonfly-hall-module.tar.gz -C dist dragonfly-hall/
-          echo "Tarball contents:"
-          tar -tzvf dragonfly-hall-module.tar.gz
+          ls -lh dragonfly-hall-module.tar.gz
+          md5sum dragonfly-hall-module.tar.gz
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dragonfly-hall-module.tar.gz
+      - name: Upload Release Asset
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --notes "Dragonfly Hall Reverb ${{ github.ref_name }}" \
+            dragonfly-hall-module.tar.gz
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update release.json
         run: |
