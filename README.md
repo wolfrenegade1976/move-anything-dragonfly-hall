@@ -1,6 +1,6 @@
-# Dragonfly Hall Reverb for Move Everything
+# Dragonfly Hall Reverb for Schwung
 
-A port of [Dragonfly Hall Reverb](https://github.com/michaelwillis/dragonfly-reverb) by Michael Willis for [Move Everything](https://github.com/charlesvestal/move-anything) on Ableton Move.
+A port of [Dragonfly Hall Reverb](https://github.com/michaelwillis/dragonfly-reverb) by Michael Willis for [Schwung](https://github.com/charlesvestal/move-anything) on Ableton Move.
 
 ## Features
 
@@ -11,7 +11,7 @@ A port of [Dragonfly Hall Reverb](https://github.com/michaelwillis/dragonfly-rev
 
 ## Installation
 
-### Via Move Everything Module Store (coming soon)
+### Via Schwung Module Store (coming soon)
 
 ### Manual Installation
 
@@ -21,7 +21,7 @@ A port of [Dragonfly Hall Reverb](https://github.com/michaelwillis/dragonfly-rev
 
 Or copy manually via SSH:
 ```bash
-rsync -av src/ ableton@move.local:/data/UserData/move-anything/modules/audio_fx/dragonfly-hall/
+rsync -av src/ ableton@move.local:/data/UserData/schwung/modules/audio_fx/dragonfly-hall/
 ```
 
 ## Building
@@ -52,7 +52,7 @@ Jog wheel menu provides access to all remaining parameters plus preset browser.
 ## Credits
 
 - [Dragonfly Reverb](https://github.com/michaelwillis/dragonfly-reverb) by Michael Willis & Rob van den Berg (GPL-3.0)
-- [Move Everything](https://github.com/charlesvestal/move-anything) by Charles Vestal
+- [Schwung](https://github.com/charlesvestal/move-anything) by Charles Vestal
 - Port by Brad Coomber, developed with Claude (Anthropic)
 
 ## License
